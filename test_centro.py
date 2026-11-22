@@ -25,16 +25,21 @@ class TestCentro(unittest.TestCase):
         centro = Centro()
         laboratorio = Laboratorio("LAB001", "Meccanica", 15)
         centro.aggiungi_laboratorio(laboratorio)
+        # test data passata
         sessione = Sessione("LAB001", giorno1, "09:00", "12:00", "Giovanni", 13)
         with self.assertRaises(DataNonAmmessa):
             centro.prenota(sessione, oggi=oggi)
+        # test venerdì
         sessione = Sessione("LAB001", giorno2, "09:00", "12:00", "Giovanni", 13)
         with self.assertRaises(DataNonAmmessa):
             centro.prenota(sessione, oggi=oggi)
+        # test data oltre l'orizzonte
         sessione = Sessione("LAB001", oggi + timedelta(days=ORIZZONTE_GIORNI + 1), "09:00", "12:00", "Giovanni", 13)
         with self.assertRaises(DataNonAmmessa):
             centro.prenota(sessione, oggi=oggi)
+        # accettazione data di oggi
         sessione = Sessione("LAB001", oggi, "09:00", "12:00", "Giovanni", 13)
         centro.prenota(sessione, oggi=oggi)
+        # accettazione data limite di ORIZZONTE GIORNI
         sessione = Sessione("LAB001", oggi + timedelta(days=ORIZZONTE_GIORNI), "09:00", "12:00", "Giovanni", 13)
         centro.prenota(sessione, oggi=oggi)
