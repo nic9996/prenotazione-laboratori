@@ -71,4 +71,26 @@ class TestCentro(unittest.TestCase):
                     centro.cancella("x")
         with self.assertRaises(SessioneNonTrovata):
             centro.sessione("x")
-        
+
+    def test_A(self):
+        # `sessioni_del_giorno` restituisce le sessioni ordinate per orario di
+        # inizio e, se indicato il laboratorio, solo quelle del laboratorio. I dati vanno
+        # scelti in modo che l'ordine per orario sia diverso da quello per codice:
+        # altrimenti il test non distingue i due comportamenti.
+        giorno = date(2026, 11, 26)
+        oggi = date(2026, 11, 22)
+        centro = Centro()
+        laboratorio_a = Laboratorio("LAB001", "Meccanica", 13)
+        centro.aggiungi_laboratorio(laboratorio_a)
+        laboratorio_b = Laboratorio("LAB002", "Chimica", 13)
+        centro.aggiungi_laboratorio(laboratorio_b)
+        sessione_b = Sessione("LAB002", giorno, "12:00", "14:00", "Giovanni", 10)
+        centro.prenota(sessione_b, oggi)
+        sessione_a = Sessione("LAB001", giorno, "09:00", "12:00", "Giovanni", 10)
+        centro.prenota(sessione_a, oggi)
+
+        tutti = centro.sessioni_del_giorno(giorno)
+        filtrati = centro.sessioni_del_giorno(giorno, "LAB001")
+
+        self.assertEqual([x.id for x in tutti], [2, 1])
+        self.assertEqual([x.id for x in filtrati], [2])
