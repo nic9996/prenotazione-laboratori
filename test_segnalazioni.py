@@ -1,11 +1,14 @@
 import unittest
 from datetime import date
 
-from prenotazioni import Sessione, Centro, Laboratorio
+from prenotazioni import Centro, Laboratorio, Sessione
+
 
 class TestSessione(unittest.TestCase):
     def setUp(self):
-        self.sessione = Sessione("LAB001", date(2026, 11, 23), "08:00", "10:00", "Giovanni", 12)
+        self.sessione = Sessione(
+            "LAB001", date(2026, 11, 23), "08:00", "10:00", "Giovanni", 12
+        )
 
     def test_orario_di_apertura(self):
         self.sessione
