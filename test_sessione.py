@@ -1,7 +1,7 @@
 import unittest
-from datetime import date
+from datetime import date, timedelta
 
-from prenotazioni import Sessione
+from prenotazioni import Sessione, Laboratorio, Centro, GIORNO_CHIUSURA, DataNonAmmessa, PostazioniInsufficienti
 
 class TestSessione(unittest.TestCase):
     def test_orari_non_ammessi(self):
@@ -15,3 +15,7 @@ class TestSessione(unittest.TestCase):
         for inizio, fine in orari_non_ammessi:
             with self.assertRaises(ValueError):
                 Sessione("LAB001", date(2026, 11, 18), inizio, fine, "Giovanni", 1)
+
+    def test_data_non_ammessa(self):
+            with self.assertRaises(TypeError):
+                Sessione("LAB001", "2026, 11, 18", "08:00", "10:00", "Giovanni", 12)
