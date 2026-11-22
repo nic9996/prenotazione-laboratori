@@ -68,6 +68,7 @@ class TestCentro(unittest.TestCase):
         # inesistente;
         centro = Centro()
         with self.assertRaises(SessioneNonTrovata):
-            centro.sessione("x")
+                    centro.cancella("x")
         with self.assertRaises(SessioneNonTrovata):
-            centro.cancella("x")
+            centro.sessione("x")
+        
