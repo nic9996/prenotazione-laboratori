@@ -1,7 +1,7 @@
 import unittest
 from datetime import date, timedelta
 
-from prenotazioni import Centro, Laboratorio, LaboratorioNonTrovato, Sessione, DataNonAmmessa, ORIZZONTE_GIORNI
+from prenotazioni import Centro, Laboratorio, LaboratorioNonTrovato, Sessione, DataNonAmmessa, ORIZZONTE_GIORNI, SessioneNonTrovata
 
 class TestCentro(unittest.TestCase):
     # `aggiungi_laboratorio` rifiuta un codice duplicato con `ValueError`; 
@@ -62,3 +62,12 @@ class TestCentro(unittest.TestCase):
         self.assertEqual(prenotazione1, 1)
         self.assertEqual(prenotazione2, 2)
         self.assertEqual(prenotazione3, 3)
+
+    def test_id_inesistente(self):
+        #`cancella` e `sessione` sollevano `SessioneNonTrovata` per un id
+        # inesistente;
+        centro = Centro()
+        with self.assertRaises(SessioneNonTrovata):
+            centro.sessione("x")
+        with self.assertRaises(SessioneNonTrovata):
+            centro.cancella("x")
