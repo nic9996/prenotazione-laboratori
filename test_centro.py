@@ -43,3 +43,22 @@ class TestCentro(unittest.TestCase):
         # accettazione data limite di ORIZZONTE GIORNI
         sessione = Sessione("LAB001", oggi + timedelta(days=ORIZZONTE_GIORNI), "09:00", "12:00", "Giovanni", 13)
         centro.prenota(sessione, oggi=oggi)
+
+    def test_id(self):
+        # gli id assegnati da `prenota` sono progressivi e non vengono riutilizzati
+        # dopo una cancellazione;
+        giorno = date(2026, 11, 24)
+        oggi = date(2026, 11, 22)
+        centro = Centro()
+        laboratorio = Laboratorio("LAB001", "Meccanica", 13)
+        centro.aggiungi_laboratorio(laboratorio)
+        sessione_a = Sessione("LAB001", giorno, "09:00", "12:00", "Giovanni", 10)
+        prenotazione1 = centro.prenota(sessione_a, oggi)
+        sessione_b = Sessione("LAB001", giorno, "12:00", "14:00", "Giovanni", 10)
+        prenotazione2 = centro.prenota(sessione_b, oggi)
+        centro.cancella(prenotazione1)
+        sessione_c = Sessione("LAB001", giorno, "14:00", "14:30", "Giovanni", 10)
+        prenotazione3 = centro.prenota(sessione_c, oggi)
+        self.assertEqual(prenotazione1, 1)
+        self.assertEqual(prenotazione2, 2)
+        self.assertEqual(prenotazione3, 3)
