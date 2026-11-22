@@ -19,12 +19,16 @@ class TestCentro(unittest.TestCase):
     def test_data_non_ammessa(self):
         # `prenota` solleva `DataNonAmmessa` per una data passata, un venerdì e una
         #  data oltre l'orizzonte, e accetta la data di oggi;
-        giorno = date(2026, 11, 8)
+        giorno1 = date(2026, 11, 8)
+        giorno2 = date(2026, 11, 20) # è un venerdì
         oggi = date(2026, 11, 22)
         centro = Centro()
         laboratorio = Laboratorio("LAB001", "Meccanica", 15)
         centro.aggiungi_laboratorio(laboratorio)
-        sessione = Sessione("LAB001", giorno, "09:00", "12:00", "Giovanni", 13)
+        sessione = Sessione("LAB001", giorno1, "09:00", "12:00", "Giovanni", 13)
+        with self.assertRaises(DataNonAmmessa):
+            centro.prenota(sessione, oggi=oggi)
+        sessione = Sessione("LAB001", giorno2, "09:00", "12:00", "Giovanni", 13)
         with self.assertRaises(DataNonAmmessa):
             centro.prenota(sessione, oggi=oggi)
         sessione = Sessione("LAB001", oggi + timedelta(days=ORIZZONTE_GIORNI + 1), "09:00", "12:00", "Giovanni", 13)
